@@ -78,7 +78,7 @@ Le système fonde son raisonnement sur les cadres méthodologiques suivants incl
 ### Prérequis
 
 * Python 3.10+
-* `uv` installé (`curl -LsSf https://astral.sh/uv/install.sh | sh`)
+* `uv` installé (`powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/0.11.14/install.ps1 | iex"`)
 
 ### 1. Installation
 
