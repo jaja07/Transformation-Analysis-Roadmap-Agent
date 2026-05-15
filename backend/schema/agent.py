@@ -14,10 +14,13 @@ class BusinessCaseInput(BaseModel):
         description="Le texte brut décrivant la situation, les enjeux et les contraintes de l'entreprise. Ce texte peut être vague ou narratif.",
         example="Notre entreprise souhaite améliorer l'expérience client et réduire les coûts opérationnels..."
     ) # type: ignore
-    # Optionnel : Si vous décidez de gérer l'upload de documents plus tard
     document_path: Optional[str] = Field(
         default=None,
         description="Chemin local vers le document uploadé, si applicable."
+    )
+    document_content: Optional[str] = Field(
+        default=None,
+        description="Le texte intégral extrait du document uploadé. C'est ce texte qui sera injecté dans les prompts des LLMs."
     )
 
 # --- SOUS-MODÈLES POUR LA ROADMAP ---

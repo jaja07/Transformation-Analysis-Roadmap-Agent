@@ -6,8 +6,8 @@ from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
 
 from core.config import settings
-from ..utils import log
-from ..vector_store import load_index
+from utils import log
+from vector_store import load_index
 
 # Abstraction layer above the FAISS index to simplify queries and standardize results.
 class CorpusRetriever:
@@ -39,7 +39,7 @@ class CorpusRetriever:
         
         if frameworks:
             target = set(frameworks)
-            filter_fn = lambda meta: meta.get("framework_id") in target  # noqa: E731
+            filter_fn = lambda meta: meta.get("framework") in target  # noqa: E731
 
         if use_mmr:
             # On fetch davantage de candidats puis on filtre+diversifie
@@ -165,3 +165,32 @@ def format_chunks_for_prompt(
 def get_retriever() -> CorpusRetriever:
     store = load_index()
     return CorpusRetriever(store=store)
+
+
+def retriever_node(state) -> dict:
+    """Retrieve corpus context for the current business case."""
+    print("--- [RETRIEVER] Recherche du contexte documentaire ---")
+
+    business_case = state["business_case"]
+    retriever = get_retriever()
+    
+    # On commence avec les requêtes de base
+    queries = [business_case.company_name, business_case.context_text]
+    
+    # SI l'utilisateur a uploadé un document, on utilise le début du document 
+    # (les 1000 premiers caractères) comme requête supplémentaire pour trouver les bons frameworks
+    if business_case.document_content:
+        doc_snippet = business_case.document_content[:1000]
+        queries.append(f"Analyse ce contexte métier : {doc_snippet}")
+
+    documents = retriever.retrieve_expert_context(
+        queries=queries,
+        per_query_k=3,
+    )
+
+    if isinstance(documents, dict):
+        flattened_documents = [doc for docs in documents.values() for doc in docs]
+    else:
+        flattened_documents = documents
+
+    return {"retrieved_context": format_chunks_for_prompt(flattened_documents)}

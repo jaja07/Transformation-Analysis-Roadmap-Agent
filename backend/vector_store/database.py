@@ -7,11 +7,11 @@ from pathlib import Path
 from typing import Any
 
 from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_core.documents import Document
-from langchain_huggingface import HuggingFaceEmbeddings
 
 from core.config import settings
-from ..utils import log
+from utils import log
 
 
 @lru_cache(maxsize=1)

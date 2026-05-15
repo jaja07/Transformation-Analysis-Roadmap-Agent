@@ -4,17 +4,18 @@ import asyncio
 from uuid import UUID
 from pathlib import Path
 from typing import Annotated
+from langchain_community.document_loaders import PyPDFLoader
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query, HTTPException, UploadFile, File, Depends
 from sqlmodel import select
 
-# Imports spécifiques à ton architecture
+
 from service.auth_service import get_current_user, AuthService
 from service.chat_service import ChatService
 from database.session import SessionDep
 from database.model import MAX_MESSAGE_LENGTH, User
 
-# Nouveaux imports TARA
+
 from core.graph import compiled_graph
 from schema.agent import BusinessCaseInput
 
@@ -94,6 +95,34 @@ async def websocket_endpoint(
                     context_text=user_message
                 )
                 
+                matched_files = list(UPLOAD_DIR.glob(f"{conversation_id}_source.*"))
+                extracted_doc_text = None
+                
+                if matched_files:
+                    file_path = matched_files[0]
+                    try:
+                        if file_path.suffix.lower() == ".pdf":
+                            # Extraction du texte du PDF
+                            loader = PyPDFLoader(str(file_path))
+                            pages = loader.load()
+                            extracted_doc_text = "\n".join([p.page_content for p in pages])
+                        else:
+                            # Extraction pour les fichiers TXT/CSV/JSON
+                            with open(file_path, "r", encoding="utf-8") as f:
+                                extracted_doc_text = f.read()
+                        
+                        # Optionnel : On prévient le front-end qu'on a bien lu le fichier
+                        print(f"📄 Fichier {file_path.name} lu avec succès ({len(extracted_doc_text)} caractères).")
+                    except Exception as e:
+                        print(f"⚠️ Erreur lors de la lecture du fichier uploadé : {e}")
+                
+                # --- PRÉPARATION DE L'INPUT TARA ---
+                business_case = BusinessCaseInput(
+                    company_name="Cas Client", 
+                    context_text=user_message,
+                    document_content=extracted_doc_text  # On injecte le texte du document ici !
+                )
+                            
                 initial_state = {
                     "business_case": business_case,
                     "planner_analysis": None,

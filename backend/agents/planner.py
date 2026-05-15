@@ -4,34 +4,27 @@ from langchain_core.prompts import ChatPromptTemplate
 from routing.router import get_llm_for_task, TaskComplexity
 
 def planner_node(state: AgentState) -> dict:
-    """
-    Analyse le cas d'entreprise et structure la logique Why/What/How.
-    """
-    print("--- [AGENT PLANNER] Analyse en cours ---")
+    print("--- [AGENT PLANNER] Structuration de l'intention ---")
     
-    # 1. Récupération des données du state
-    company_name = state["business_case"].company_name
-    context_text = state["business_case"].context_text
+    llm = get_llm_for_task(TaskComplexity.SIMPLE)
     
-    # 2. Définition du modèle (utilise Flash pour les tâches rapides)
-    llm = get_llm_for_task(TaskComplexity.SIMPLE, temperature=0.2)
-    
-    # 3. Le Prompt (idéalement à déplacer dans agents/prompts.py plus tard)
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "Tu es un architecte d'entreprise expert en transformation digitale. "
-                   "Ton rôle est d'analyser la situation d'une entreprise et de structurer "
-                   "les enjeux selon le framework IMD/Cisco : Why transform? What to transform? How to transform?"),
-        ("user", "Entreprise : {company_name}\n\nContexte : {context_text}\n\n"
-                 "Produis une analyse stratégique claire et structurée.")
+        ("system", "Tu es un expert en stratégie. Ton rôle est de définir le 'Why/What/How' "
+                   "de la transformation en te basant sur le message et le document client."),
+        ("user", "Nom de l'entreprise : {company_name}\n"
+                 "Message utilisateur : {user_input}\n"
+                 "Contenu du document : {document_content}\n\n" # 👈 Ajout ici
+                 "Identifie les objectifs et les contraintes majeures.")
     ])
     
-    # 4. Exécution de la chaîne (Prompt -> LLM)
     chain = prompt | llm
+    
+    # Injection des données dans le .invoke()
     response = chain.invoke({
-        "company_name": company_name,
-        "context_text": context_text
+        "company_name": state["business_case"].company_name,
+        "user_input": state["business_case"].context_text,
+        # On récupère le texte extrait du PDF. Si None, on met une chaîne vide.
+        "document_content": state["business_case"].document_content or "Aucun document n'a été fourni."
     })
     
-    # 5. Mise à jour du State
-    # On retourne un dictionnaire avec la clé correspondante dans AgentState
     return {"planner_analysis": response.content}

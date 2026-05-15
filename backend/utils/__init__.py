@@ -1,4 +1,6 @@
 """Utilities (logger, helpers)."""
-from utils.logger import logger as log
+import logging
+
+log = logging.getLogger(__name__)
 
 __all__ = ["log"]

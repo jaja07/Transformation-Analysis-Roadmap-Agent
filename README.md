@@ -77,23 +77,50 @@ Le système fonde son raisonnement sur les cadres méthodologiques suivants incl
 
 ### Prérequis
 
-* Python 3.10+
+* Python 3.13+ pour le backend local
+* Node.js 18+ pour le frontend local
+* Docker si tu veux lancer toute la stack en conteneurs
 * `uv` installé (`powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/0.11.14/install.ps1 | iex"`)
 
-### 1. Installation
+### 1. Installation locale
 
-Clonez le dépôt et installez les dépendances en une seule commande :
+Backend :
 
 ```bash
-git clone https://github.com/votre-utilisateur/tara-digital-roadmap.git
-cd tara-digital-roadmap
+cd backend
 uv sync
 
 ```
 
-### 2. Configuration
+Frontend :
 
-Créez un fichier `.env` à la racine et ajoutez vos clés API :
+```bash
+cd frontend
+npm install
+
+```
+
+### 2. Lancement local
+
+Backend :
+
+```bash
+cd backend
+uv run fastapi dev main.py
+
+```
+
+Frontend :
+
+```bash
+cd frontend
+npm run dev
+
+```
+
+### 3. Configuration
+
+Créez un fichier `.env` dans `backend/` et ajoutez vos clés API :
 
 ```env
 GOOGLE_API_KEY=votre_cle_gemini
@@ -101,28 +128,22 @@ DATABASE_URL=sqlite:///./tara_database.db
 
 ```
 
-### 3. Ingestion du corpus (RAG)
+### 4. Ingestion du corpus (RAG)
 
 Avant le premier lancement, préparez la base vectorielle :
 
 ```bash
+cd backend
 uv run python -m data_ingestion.loader
 
 ```
 
-### 4. Lancement
+### 5. Lancement Docker
 
-**Démarrer l'API Backend (FastAPI) :**
-
-```bash
-uv run uvicorn main:app --reload
-
-```
-
-**Démarrer l'Interface (Streamlit) :**
+Depuis `backend/` :
 
 ```bash
-uv run streamlit run app.py
+docker compose up --build
 
 ```
 
@@ -131,7 +152,7 @@ uv run streamlit run app.py
 ```text
 ├── api/              # Endpoints FastAPI
 ├── core/             # Configuration et State LangGraph
-├── models/           # Schémas Pydantic et SQLModel
+├── schema/           # Schémas Pydantic et SQLModel
 ├── agents/           # Logique et Prompts des 6 agents
 ├── vector_store/     # Gestion de la base ChromaDB
 ├── retrieval/        # Logique de recherche RAG
