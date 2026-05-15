@@ -1,5 +1,5 @@
 from core.state import AgentState
-from schema.schemas import DigitalRoadmapOutput
+from schema.agent import DigitalRoadmapOutput
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from routing.router import get_llm_for_task, TaskComplexity

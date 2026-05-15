@@ -3,7 +3,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.documents import Document
 
 from core.config import settings, FRAMEWORK_REGISTRY, FRAMEWORK_LABELS
-from backend.utils import log
+from ..utils import log
 
 
 def load_corpus(corpus_dir: Path | None = None) -> list[Document]:

@@ -2,26 +2,31 @@ FROM python:3.11-slim
 
 WORKDIR /app/
 
-# Installation des dépendances système nécessaires pour psycopg2 (Postgres)
+# Installation des dépendances système
+# netcat-openbsd est ajouté pour le script d'attente de la DB
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     gcc \
     curl \
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
-# Installation de uv (méthode officielle recommandée)
+# Installation de uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Copie des fichiers de configuration uv (pour le cache des dépendances)
+# Copie des fichiers de dépendances
 COPY pyproject.toml uv.lock ./
 
-# Installation des dépendances du projet sans créer d'environnement virtuel (inutile dans Docker)
-RUN uv sync --system --frozen --no-cache
+# Installation des paquets dans le Python système du conteneur
+RUN uv sync --frozen --no-cache
 
-# Copie du reste du code du projet
+# Copie de l'intégralité du code source
 COPY . .
+
+# Gestion des permissions pour le script de démarrage
+RUN chmod +x start.sh
 
 EXPOSE 8000
 
-# Lancement direct via uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Le point d'entrée est désormais le script start.sh
+CMD ["./start.sh"]

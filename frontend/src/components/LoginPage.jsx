@@ -215,18 +215,18 @@ const handleRegister = async (e) => {
         <div className="relative z-10 space-y-8">
           <div>
             <h1 className="text-4xl font-extrabold text-white leading-tight">
-              AI that drives<br />your business.
+              AI that drives<br />digital transformation.
             </h1>
             <p className="text-slate-400 text-sm mt-3 leading-relaxed max-w-xs">
-              Get instant insights and optimize your business reports in just a few clicks with our smart platform.
+              Turn your business case into a structured, actionable strategic roadmap in seconds.
             </p>
           </div>
           <div className="space-y-3">
             {[
-              { icon: <IconChat />, title: 'Interactive AI Assistant',
-                desc: 'Chat naturally with your activity report data using our next-generation chatbot.' },
-              { icon: <IconGraph />, title: 'Dynamic graphs',
-                desc: 'Visualize your activity in real time with accurate dashboards and graphs.' },
+              { icon: <IconChat />, title: 'Multi-Agent Reasoning',
+                desc: 'Specialized AI agents analyze your business using proven academic frameworks.' },
+              { icon: <IconGraph />, title: 'Actionable Roadmaps',
+                desc: 'Get structured initiatives, budgets, and KPIs ready for deployment.' },
             ].map(({ icon, title, desc }) => (
               <div key={title} className="flex gap-3 p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
                 <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-brand-600/30 border border-brand-500/30

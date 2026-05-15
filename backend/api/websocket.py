@@ -12,11 +12,11 @@ from sqlmodel import select
 from service.auth_service import get_current_user, AuthService
 from service.chat_service import ChatService
 from database.session import SessionDep
-from database.models import MAX_MESSAGE_LENGTH, User
+from database.model import MAX_MESSAGE_LENGTH, User
 
 # Nouveaux imports TARA
 from core.graph import compiled_graph
-from schema.schemas import BusinessCaseInput
+from schema.agent import BusinessCaseInput
 
 router = APIRouter(prefix="/ws", tags=["chats"])
 CurrentUserDep = Annotated[User, Depends(get_current_user)]
@@ -107,7 +107,7 @@ async def websocket_endpoint(
                 
                 # 4. Exécution de LangGraph en mode Streaming (astream)
                 # astream() renvoie les mises à jour d'état dès qu'un nœud a terminé
-                async for output in compiled_graph.astream(initial_state):
+                async for output in compiled_graph.astream(initial_state): # type: ignore
                     # output est un dict avec la clé du nœud qui vient de s'exécuter
                     for node_name, node_state in output.items():
                         

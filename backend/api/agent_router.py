@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from schema.schemas import BusinessCaseInput
+from schema.agent import BusinessCaseInput
 from core.graph import compiled_graph
 
 router = APIRouter()

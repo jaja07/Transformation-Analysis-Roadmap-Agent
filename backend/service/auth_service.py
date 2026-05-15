@@ -43,13 +43,13 @@ class AuthService:
             else timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         )
         to_encode.update({"exp": expire})
-        return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+        return jwt.encode(to_encode, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 
     def decode_token(self, token: str) -> str:
         """Décode le JWT et retourne l'email (sub)."""
         try:
             payload = jwt.decode(
-                token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+                token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM]
             )
             email: str | None = payload.get("sub")
             if email is None:
@@ -71,7 +71,7 @@ def get_current_user(
     Dependency FastAPI : extrait l'utilisateur courant depuis le Bearer JWT.
     À injecter dans les routes protégées.
     """
-    from database.models import User  # import local pour éviter les circulaires
+    from database.model import User  # import local pour éviter les circulaires
 
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -80,7 +80,7 @@ def get_current_user(
     )
     try:
         payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+            token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM]
         )
         email: str | None = payload.get("sub")
         if email is None:

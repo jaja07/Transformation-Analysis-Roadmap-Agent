@@ -6,8 +6,8 @@ from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
 
 from core.config import settings
-from backend.utils import log
-from backend.vector_store import load_index
+from ..utils import log
+from ..vector_store import load_index
 
 # Abstraction layer above the FAISS index to simplify queries and standardize results.
 class CorpusRetriever:

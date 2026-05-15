@@ -1,6 +1,6 @@
 from sqlmodel import Session, select
 from sqlalchemy.orm import selectinload
-from database.models import Conversation, Message, User
+from database.model import Conversation, Message, User
 from uuid import UUID
 
 

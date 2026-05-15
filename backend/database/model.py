@@ -25,7 +25,7 @@ class User(SQLModel, table=True):
     email: str = Field(unique=True, index=True, nullable=False)
     nom: str = Field(nullable=False)
     prenom: str = Field(nullable=False)
-    role: str = Field(default=UserRole.USER.value, nullable=False)
+    role: UserRole = Field(default=UserRole.USER, nullable=False)
     hashed_password: str = Field(nullable=False)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -46,10 +46,10 @@ class Conversation(SQLModel, table=True):
     __tablename__ = "conversations" # pyright: ignore
 
     id: UUID = Field(default_factory=uuid4, primary_key=True)
-    title: str = Field(default="Nouvelle conversation")
+    title: str = Field(default="Nouvelle conversation", max_length=255)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-    user_id: Optional[UUID] = Field(default=None, foreign_key="users.id", ondelete="CASCADE")
+    user_id: Optional[UUID] = Field(default=None, index=True, foreign_key="users.id", ondelete="CASCADE")
     user: Optional[User] = Relationship(back_populates="conversations")
 
     messages: list["Message"] = Relationship(back_populates="conversation", cascade_delete=True)
@@ -61,5 +61,11 @@ class Message(SQLModel, table=True):
     role: MessageRole = Field(nullable=False)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-    conversation_id: Optional[UUID] = Field(default=None, foreign_key="conversations.id", ondelete="CASCADE")
+    conversation_id: Optional[UUID] = Field(default=None, index=True, foreign_key="conversations.id", ondelete="CASCADE")
     conversation: Optional[Conversation] = Relationship(back_populates="messages")
+
+# """Modèles SQLModel pour la base de données"""
+# class AnalysisCache(SQLModel, table=True):
+#     id: Optional[int] = Field(default=None, primary_key=True)
+#     input_hash: str
+#     result: str

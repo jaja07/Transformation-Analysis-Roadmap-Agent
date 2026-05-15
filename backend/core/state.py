@@ -1,5 +1,5 @@
 from typing import TypedDict, Optional
-from schema.schemas import BusinessCaseInput, DigitalRoadmapOutput
+from schema.agent import BusinessCaseInput, DigitalRoadmapOutput
 
 class AgentState(TypedDict):
     # 1. Les données d'entrée

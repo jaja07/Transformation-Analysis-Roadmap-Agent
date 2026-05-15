@@ -2,7 +2,7 @@ from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from core.config import settings
-from backend.utils import log
+from ..utils import log
 
 
 def chunk_documents(

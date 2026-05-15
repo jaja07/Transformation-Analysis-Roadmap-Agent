@@ -5,12 +5,16 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "alembic>=1.18.4",
     "chromadb>=1.5.9",
     "fastapi>=0.136.1",
+    "jwt>=1.4.0",
     "langchain-community>=0.4.1",
     "langchain-core>=1.4.0",
     "langchain-google-genai>=4.2.2",
     "langgraph>=1.2.0",
+    "psycopg2-binary>=2.9.12",
+    "pwdlib[argon2]>=0.3.0",
     "pydantic>=2.13.4",
     "pypdf>=6.11.0",
     "python-dotenv>=1.2.2",

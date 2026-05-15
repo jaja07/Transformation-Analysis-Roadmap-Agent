@@ -5,7 +5,7 @@ import ChatArea from './ChatArea'
 import { useConversations } from '../hooks/useConversations'
 
 export default function Dashboard() {
-  const [section, setSection] = useState('Analyse CRA') 
+  const [section, setSection] = useState('Transformation Analysis') 
   const { conversations, create, loading } = useConversations()
   const [activeConvId, setActiveConvId] = useState(null)
 
@@ -14,7 +14,7 @@ export default function Dashboard() {
     try {
       const newConv = await create("Nouvelle Analyse")
       setActiveConvId(newConv.id)
-      setSection('Analyse CRA') // Bascule sur le chat après création
+      setSection('Transformation Analysis') // Bascule sur le chat après création
     } catch (err) {
       console.error("Erreur création :", err)
     }
@@ -29,14 +29,14 @@ export default function Dashboard() {
         conversations={conversations}
         onSelectConv={(id) => {
           setActiveConvId(id)
-          setSection('Analyse CRA') // Force l'affichage du chat lors d'une sélection
+          setSection('Transformation Analysis') // Force l'affichage du chat lors d'une sélection
         }}
         activeConvId={activeConvId}
       />
       
       <main className="flex-1 overflow-hidden">
-        {/* Vérifiez bien que 'Analyse CRA' correspond au texte envoyé par la Sidebar */}
-        {activeConvId && section === 'Analyse CRA' ? (
+        {/* Vérifiez bien que 'Transformation Analysis' correspond au texte envoyé par la Sidebar */}
+        {activeConvId && section === 'Transformation Analysis' ? (
           <ChatArea conversationId={activeConvId} key={activeConvId} />
         ) : (
           <div className="flex-1 h-full flex items-center justify-center text-gray-500">

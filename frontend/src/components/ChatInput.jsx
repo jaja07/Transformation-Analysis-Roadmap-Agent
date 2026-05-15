@@ -48,7 +48,7 @@ export default function ChatInput({ onSend, onFile, disabled }) {
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKey}
-          placeholder="Send a message or ask a question about your Activity Report."
+          placeholder="Describe the company, its context, objectives, and constraints..."
           rows={1}
           disabled={disabled}
           className="flex-1 resize-none bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm

@@ -7,9 +7,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: ${DB_USER:-tara_user}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-tara_pass}
-      POSTGRES_DB: ${DB_NAME:-tara_db}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - tara_data:/var/lib/postgresql/data
     restart: always

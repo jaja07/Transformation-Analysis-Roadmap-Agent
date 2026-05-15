@@ -52,9 +52,9 @@ export default function Sidebar({
 
               {/* ANALYSE COURANTE */}
               <button
-                onClick={() => onSection('Analyse CRA')}
+                onClick={() => onSection('Transformation Analysis')}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                  activeSection === 'Analyse CRA' ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-400 hover:bg-gray-800/50'
+                  activeSection === 'Transformation Analysis' ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-400 hover:bg-gray-800/50'
                 }`}
               >
                 <span className="text-base">📊</span> Current Analysis
@@ -92,7 +92,7 @@ export default function Sidebar({
             /* VUE HISTORIQUE DES RAPPORTS */
             <div className="animate-in slide-in-from-left duration-200">
               <button
-                onClick={() => onSection('Analyse CRA')}
+                onClick={() => onSection('Transformation Analysis')}
                 className="flex items-center gap-2 text-[10px] text-brand-400 hover:text-brand-300 mb-6 px-3 font-bold uppercase tracking-widest transition-colors"
               >
                 ← Back to Menu
@@ -109,7 +109,7 @@ export default function Sidebar({
                       key={conv.id}
                       onClick={() => {
                         onSelectConv(conv.id);
-                        onSection('Analyse CRA');
+                        onSection('Transformation Analysis');
                       }}
                       className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-all truncate group
                         ${activeConvId === conv.id

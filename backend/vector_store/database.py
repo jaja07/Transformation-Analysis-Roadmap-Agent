@@ -11,7 +11,7 @@ from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 
 from core.config import settings
-from backend.utils import log
+from ..utils import log
 
 
 @lru_cache(maxsize=1)

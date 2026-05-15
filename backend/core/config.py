@@ -21,8 +21,8 @@ class Settings(BaseSettings):
         )
 
     # --- JWT Configuration (pour les WebSockets) ---
-    SECRET_KEY: str
-    ALGORITHM: str = "HS256"
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: float = 60
 
     # --- TARA : Configuration IA ---

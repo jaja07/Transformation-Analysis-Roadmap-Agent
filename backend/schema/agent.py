@@ -38,3 +38,4 @@ class DigitalRoadmapOutput(BaseModel):
     rationale: TransformationRationale = Field(default=..., description="Le contexte stratégique de la transformation")
     initiatives: List[Initiative] = Field(default=..., description="La liste structurée des initiatives de la roadmap")
     overall_kpis: List[str] = Field(default=..., description="Les indicateurs clés de performance globaux pour suivre la transformation")
+
