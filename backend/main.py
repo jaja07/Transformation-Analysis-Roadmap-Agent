@@ -12,7 +12,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from api.agent_router import router as api_router
 from api.chat_router import router as chat_router
 from api.user_router import router as user_router
-from api.websocket import router as websocket_router
+#from api.websocket import router as websocket_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -37,7 +37,7 @@ app.add_middleware(
 app.include_router(api_router, prefix="/api")
 app.include_router(chat_router, prefix="/api")
 app.include_router(user_router, prefix="/api")
-app.include_router(websocket_router, prefix="/api")
+# app.include_router(websocket_router, prefix="/api")
 
 @app.get("/", tags=["Health"])
 async def root():

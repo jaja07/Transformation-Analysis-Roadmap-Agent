@@ -18,6 +18,7 @@ import sys
 import time
 from pathlib import Path
 from datetime import datetime
+from core.config import settings
 
 # ---------------------------------------------------------------------------
 # Chemins — tous relatifs au dossier où se trouve ce fichier (agents/)
@@ -65,7 +66,7 @@ def check_prerequisites():
     ok = True
 
     # Clé API NVIDIA
-    api_key = os.getenv("NVIDIA_API_KEY")
+    api_key = settings.NVIDIA_API_KEY
     if not api_key:
         log("✗ NVIDIA_API_KEY non définie")
         log("  → export NVIDIA_API_KEY='ta_clé_ici'")
@@ -175,11 +176,11 @@ def run_pipeline(business_case: str):
     # ── Agent 1 : Planner ──────────────────────────────────────────────────
     step(1, 6, "Planner Agent")
     t0 = time.time()
-    from planner.graph import planner_graph
+    from agents.planner.graph import planner_graph
     r = planner_graph.invoke({
         "business_case": results["business_case"],
         "why": "", "what": "", "how": "", "structured_problem": "",
-    })
+    }) # type: ignore
     results.update({"why": r["why"], "what": r["what"],
                     "how": r["how"], "structured_problem": r["structured_problem"]})
     log(f"✓ Terminé en {round(time.time()-t0, 1)}s")
@@ -190,12 +191,12 @@ def run_pipeline(business_case: str):
     # ── Agent 2 : Retrieval ────────────────────────────────────────────────
     step(2, 6, "Retrieval Agent")
     t0 = time.time()
-    from retriever.graph import retrieval_graph
+    from agents.retriever.graph import retrieval_graph
     r = retrieval_graph.invoke({
         "structured_problem": results["structured_problem"],
         "why": results["why"], "what": results["what"], "how": results["how"],
         "why_context": "", "what_context": "", "how_context": "", "global_context": "",
-    })
+    }) # type: ignore
     results.update({
         "why_context": r["why_context"], "what_context": r["what_context"],
         "how_context": r["how_context"], "global_context": r["global_context"],
@@ -209,14 +210,14 @@ def run_pipeline(business_case: str):
     # ── Agent 3 : Canvas Analyst ───────────────────────────────────────────
     step(3, 6, "Canvas Analyst Agent")
     t0 = time.time()
-    from canvas_analyst.graph import canvas_graph
+    from agents.canvas_analyst.graph import canvas_graph
     r = canvas_graph.invoke({
         "business_case": results["business_case"],
         "structured_problem": results["structured_problem"],
         "what_context": results["what_context"],
         "global_context": results["global_context"],
         "canvas_analysis": "",
-    })
+    }) # type: ignore
     results["canvas_analysis"] = r["canvas_analysis"]
     log(f"✓ Terminé en {round(time.time()-t0, 1)}s")
     log(f"  canvas_analysis : {len(r['canvas_analysis'])} chars")
@@ -224,7 +225,7 @@ def run_pipeline(business_case: str):
     # ── Agent 4 : Strategist ───────────────────────────────────────────────
     step(4, 6, "Strategist Agent")
     t0 = time.time()
-    from strategist.graph import strategist_graph
+    from agents.strategist.graph import strategist_graph
     r = strategist_graph.invoke({
         "business_case": results["business_case"],
         "structured_problem": results["structured_problem"],
@@ -233,7 +234,7 @@ def run_pipeline(business_case: str):
         "how_context": results["how_context"],
         "global_context": results["global_context"],
         "strategic_analysis": "",
-    })
+    }) # type: ignore
     results["strategic_analysis"] = r["strategic_analysis"]
     log(f"✓ Terminé en {round(time.time()-t0, 1)}s")
     log(f"  strategic_analysis : {len(r['strategic_analysis'])} chars")
@@ -241,7 +242,7 @@ def run_pipeline(business_case: str):
     # ── Agent 5 : Roadmap Generator ────────────────────────────────────────
     step(5, 6, "Roadmap Generator Agent")
     t0 = time.time()
-    from roadmap_generator.graph import roadmap_graph
+    from agents.roadmap_generator.graph import roadmap_graph
     r = roadmap_graph.invoke({
         "business_case": results["business_case"],
         "structured_problem": results["structured_problem"],
@@ -249,7 +250,7 @@ def run_pipeline(business_case: str):
         "strategic_analysis": results["strategic_analysis"],
         "global_context": results["global_context"],
         "roadmap": "",
-    })
+    }) # type: ignore
     results["roadmap"] = r["roadmap"]
     log(f"✓ Terminé en {round(time.time()-t0, 1)}s")
     log(f"  roadmap : {len(r['roadmap'])} chars")
@@ -257,7 +258,7 @@ def run_pipeline(business_case: str):
     # ── Agent 6 : Evaluator ────────────────────────────────────────────────
     step(6, 6, "Evaluator Agent")
     t0 = time.time()
-    from evaluator.graph import evaluator_graph
+    from agents.evaluator.graph import evaluator_graph
     r = evaluator_graph.invoke({
         "business_case": results["business_case"],
         "structured_problem": results["structured_problem"],
@@ -265,7 +266,7 @@ def run_pipeline(business_case: str):
         "strategic_analysis": results["strategic_analysis"],
         "roadmap": results["roadmap"],
         "evaluation": "", "is_valid": False,
-    })
+    }) # type: ignore
     results["evaluation"] = r["evaluation"]
     results["is_valid"]   = r["is_valid"]
     log(f"✓ Terminé en {round(time.time()-t0, 1)}s")

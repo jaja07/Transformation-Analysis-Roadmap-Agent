@@ -7,6 +7,7 @@ Utilise l'API OpenAI-compatible de NVIDIA Integrate.
 import os
 from typing import Optional
 from openai import OpenAI
+from core.config import settings
 
 
 # ---------------------------------------------------------------------------
@@ -14,7 +15,7 @@ from openai import OpenAI
 # ---------------------------------------------------------------------------
 
 def _get_client() -> OpenAI:
-    api_key = os.getenv("NVIDIA_API_KEY")
+    api_key = settings.NVIDIA_API_KEY
     if not api_key:
         raise ValueError("La variable d'environnement NVIDIA_API_KEY n'est pas définie.")
     return OpenAI(
@@ -83,15 +84,15 @@ def call_nim(
     if stream:
         full_response = ""
         for chunk in completion:
-            if chunk.choices and chunk.choices[0].delta.content is not None:
-                content = chunk.choices[0].delta.content
+            if chunk.choices and chunk.choices[0].delta.content is not None: # type: ignore
+                content = chunk.choices[0].delta.content # type: ignore
                 print(content, end="", flush=True)
                 full_response += content
         print()  # saut de ligne final
         return full_response
 
     # Mode non-stream : retourne directement le contenu
-    return completion.choices[0].message.content
+    return completion.choices[0].message.content # type: ignore
 
 
 # ---------------------------------------------------------------------------

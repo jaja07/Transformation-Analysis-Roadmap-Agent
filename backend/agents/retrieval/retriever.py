@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Optional
 from openai import OpenAI
 import chromadb
+from core.config import settings
 
 
 # ---------------------------------------------------------------------------
@@ -16,7 +17,8 @@ import chromadb
 # ---------------------------------------------------------------------------
 
 DEFAULT_EMBED_MODEL = "nvidia/nv-embedqa-e5-v5"
-DEFAULT_CHROMA_PATH = "vector_store/chroma_db"
+BASE_DIR = Path(__file__).resolve().parent.parent
+DEFAULT_CHROMA_PATH = BASE_DIR / "vector_store" / "chroma_db"
 DEFAULT_COLLECTION  = "digital_transformation_corpus"
 DEFAULT_N_RESULTS   = 5
 
@@ -33,7 +35,7 @@ RetrievedChunk = dict  # {"text": str, "metadata": {...}, "distance": float}
 # ---------------------------------------------------------------------------
 
 def _get_embed_client() -> OpenAI:
-    api_key = os.getenv("NVIDIA_API_KEY")
+    api_key = settings.NVIDIA_API_KEY
     if not api_key:
         raise ValueError("La variable d'environnement NVIDIA_API_KEY n'est pas définie.")
     return OpenAI(
@@ -43,7 +45,7 @@ def _get_embed_client() -> OpenAI:
 
 
 def _get_chroma_collection(
-    chroma_path: str = DEFAULT_CHROMA_PATH,
+    chroma_path: str | Path = DEFAULT_CHROMA_PATH,
     collection_name: str = DEFAULT_COLLECTION,
 ) -> chromadb.Collection:
     """Charge la collection ChromaDB persistante."""
@@ -65,7 +67,7 @@ def retrieve(
     query: str,
     n_results: int = DEFAULT_N_RESULTS,
     filter_source: Optional[str] = None,
-    chroma_path: str = DEFAULT_CHROMA_PATH,
+    chroma_path: str | Path = DEFAULT_CHROMA_PATH,
     collection_name: str = DEFAULT_COLLECTION,
     embed_model: str = DEFAULT_EMBED_MODEL,
 ) -> list[RetrievedChunk]:
@@ -109,16 +111,16 @@ def retrieve(
     results = collection.query(
         query_embeddings=[query_vector],
         n_results=n_results,
-        where=where_filter,
+        where=where_filter, # type: ignore
         include=["documents", "metadatas", "distances"],
     )
 
     # 4. Formater les résultats
     chunks = []
     for doc, meta, dist in zip(
-        results["documents"][0],
-        results["metadatas"][0],
-        results["distances"][0],
+        results["documents"][0], # type: ignore
+        results["metadatas"][0], # type: ignore
+        results["distances"][0], # type: ignore
     ):
         chunks.append({
             "text": doc,

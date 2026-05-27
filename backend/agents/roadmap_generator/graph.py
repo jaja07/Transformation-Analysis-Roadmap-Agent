@@ -4,8 +4,8 @@ Sous-graph LangGraph du Roadmap Generator Agent.
 """
 
 from langgraph.graph import StateGraph, START, END
-from roadmap_generator.state import RoadmapState
-from roadmap_generator.nodes import roadmap_node
+from .state import RoadmapState
+from .nodes import roadmap_node
 
 
 # ---------------------------------------------------------------------------

@@ -3,9 +3,9 @@ agents/roadmap_generator/nodes.py
 Nodes du Roadmap Generator Agent.
 """
 
-from roadmap_generator.state import RoadmapState
-from roadmap_generator.prompts import SYSTEM_PROMPT, ROADMAP_PROMPT
-from llm_clients.nim_client import call_nim
+from .state import RoadmapState
+from .prompts import SYSTEM_PROMPT, ROADMAP_PROMPT
+from ..llm_clients.nim_client import call_nim
 
 
 def roadmap_node(state: RoadmapState) -> RoadmapState:

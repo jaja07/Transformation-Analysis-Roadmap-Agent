@@ -3,10 +3,10 @@ agents/retriever/nodes.py
 Nodes du Retrieval Agent.
 """
 
-from retriever.state import RetrievalState
-from retriever.prompts import SYSTEM_PROMPT, QUERY_GENERATION_PROMPT
-from llm_clients.nim_client import call_nim
-from retrieval.retriever import retrieve, format_chunks
+from .state import RetrievalState
+from .prompts import SYSTEM_PROMPT, QUERY_GENERATION_PROMPT
+from ..llm_clients.nim_client import call_nim
+from ..retrieval.retriever import retrieve, format_chunks
 
 
 def generate_queries_node(state: RetrievalState) -> RetrievalState:

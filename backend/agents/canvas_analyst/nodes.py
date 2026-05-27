@@ -3,9 +3,9 @@ agents/canvas_analyst/nodes.py
 Nodes du Canvas Analyst Agent.
 """
 
-from canvas_analyst.state import CanvasState
-from canvas_analyst.prompts import SYSTEM_PROMPT, CANVAS_ANALYSIS_PROMPT
-from llm_clients.nim_client import call_nim
+from .state import CanvasState
+from .prompts import SYSTEM_PROMPT, CANVAS_ANALYSIS_PROMPT
+from ..llm_clients.nim_client import call_nim
 
 
 def canvas_analysis_node(state: CanvasState) -> CanvasState:

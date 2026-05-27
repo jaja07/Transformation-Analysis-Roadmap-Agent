@@ -4,8 +4,8 @@ Sous-graph LangGraph du Canvas Analyst Agent.
 """
 
 from langgraph.graph import StateGraph, START, END
-from canvas_analyst.state import CanvasState
-from canvas_analyst.nodes import canvas_analysis_node
+from .state import CanvasState
+from .nodes import canvas_analysis_node
 
 
 # ---------------------------------------------------------------------------

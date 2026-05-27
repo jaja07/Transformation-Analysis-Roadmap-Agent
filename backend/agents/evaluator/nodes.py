@@ -3,9 +3,9 @@ agents/evaluator/nodes.py
 Nodes du Evaluator Agent.
 """
 
-from evaluator.state import EvaluatorState
-from evaluator.prompts import SYSTEM_PROMPT, EVALUATOR_PROMPT
-from llm_clients.nim_client import call_nim
+from .state import EvaluatorState
+from .prompts import SYSTEM_PROMPT, EVALUATOR_PROMPT
+from ..llm_clients.nim_client import call_nim
 
 
 def evaluate_node(state: EvaluatorState) -> EvaluatorState:

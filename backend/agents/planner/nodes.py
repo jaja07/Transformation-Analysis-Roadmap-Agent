@@ -3,9 +3,9 @@ agents/planner/nodes.py
 Nodes du Planner Agent.
 """
 
-from planner.state import PlannerState
-from planner.prompts import SYSTEM_PROMPT, PLANNER_PROMPT
-from llm_clients.nim_client import call_nim
+from .state import PlannerState
+from .prompts import SYSTEM_PROMPT, PLANNER_PROMPT
+from ..llm_clients.nim_client import call_nim
 
 
 def parse_planner_response(response: str) -> dict:

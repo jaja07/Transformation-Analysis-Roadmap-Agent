@@ -4,8 +4,8 @@ Sous-graph LangGraph du Evaluator Agent.
 """
 
 from langgraph.graph import StateGraph, START, END
-from evaluator.state import EvaluatorState
-from evaluator.nodes import evaluate_node
+from .state import EvaluatorState
+from .nodes import evaluate_node
 
 
 # ---------------------------------------------------------------------------

@@ -32,10 +32,11 @@ CurrentUserDep   = Annotated[User, Depends(get_current_user)]
              summary="Créer un compte utilisateur")
 def create_user(user_data: UserCreateDTO, user_service: UserServiceDep):
     """Inscription d'un nouvel utilisateur."""
-    try:
-        return user_service.create_user(user_data)
-    except ValueError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    return user_service.create_user(user_data)
+    # try:
+    #     return user_service.create_user(user_data)
+    # except ValueError as e:
+    #     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 
 @router.post("/token", response_model=Token, tags=["Auth"],

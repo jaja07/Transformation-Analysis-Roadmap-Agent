@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -11,7 +13,11 @@ class Settings(BaseSettings):
     DB_PORT: int = 5432
     DB_NAME: str = "tara_db"
     DB_USER: str = "postgres"
-    DB_PASSWORD: SecretStr
+    # En développement, on fournit un mot de passe par défaut pour éviter
+    # que l'import du module échoue lorsque les variables d'environnement
+    # ne sont pas présentes. En production, fixez `DB_PASSWORD` via .env ou
+    # variables d'environnement.
+    DB_PASSWORD: SecretStr = SecretStr("postgres")
 
     @property
     def database_url(self) -> str:
@@ -21,12 +27,16 @@ class Settings(BaseSettings):
         )
 
     # --- JWT Configuration (pour les WebSockets) ---
-    JWT_SECRET_KEY: str
+    # Clé secrète JWT par défaut pour dev. Remplacez en production.
+    JWT_SECRET_KEY: str = "dev-jwt-secret"
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: float = 60
 
     # --- TARA : Configuration IA ---
-    GOOGLE_API_KEY: str
+    # Clés API optionnelles — elles seront lues depuis `.env` si présentes.
+    # Sans valeur par défaut, Pydantic les considère comme obligatoires.
+    GOOGLE_API_KEY: str | None = None
+    NVIDIA_API_KEY: str | None = None
     OLLAMA_BASE_URL: str = "http://localhost:11434"
 
     model_config = SettingsConfigDict(

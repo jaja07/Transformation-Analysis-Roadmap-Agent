@@ -14,15 +14,15 @@ Flux :
 """
 
 from langgraph.graph import StateGraph, START, END
-from orchestrator.state import GlobalState
+from .state import GlobalState
 
 # Import des sous-graphs compilés
-from planner.graph import planner_graph
-from retrieval_agent.graph import retrieval_graph
-from canvas_analyst.graph import canvas_graph
-from strategist.graph import strategist_graph
-from roadmap_generator.graph import roadmap_graph
-from evaluator.graph import evaluator_graph
+from ..planner.graph import planner_graph
+from ..retriever.graph import retrieval_graph
+from ..canvas_analyst.graph import canvas_graph
+from ..strategist.graph import strategist_graph
+from ..roadmap_generator.graph import roadmap_graph
+from ..evaluator.graph import evaluator_graph
 
 
 # ---------------------------------------------------------------------------
@@ -56,7 +56,7 @@ def run_retrieval(state: GlobalState) -> GlobalState:
         "what_context": "",
         "how_context": "",
         "global_context": "",
-    })
+    }) # type: ignore
     return {
         **state,
         "why_context": result["why_context"],

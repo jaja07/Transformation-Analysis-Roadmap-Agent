@@ -10,14 +10,15 @@ from pathlib import Path
 from typing import Optional
 from openai import OpenAI
 import chromadb
-
+from core.config import settings
 
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
 
 DEFAULT_EMBED_MODEL = "nvidia/nv-embedqa-e5-v5"
-DEFAULT_CHROMA_PATH = "vector_store/chroma_db"
+BASE_DIR = Path(__file__).resolve().parent.parent
+DEFAULT_CHROMA_PATH = BASE_DIR / "vector_store" / "chroma_db"
 DEFAULT_COLLECTION  = "digital_transformation_corpus"
 BATCH_SIZE          = 32  # NIM accepte plusieurs textes par appel
 
@@ -27,7 +28,7 @@ BATCH_SIZE          = 32  # NIM accepte plusieurs textes par appel
 # ---------------------------------------------------------------------------
 
 def _get_embed_client() -> OpenAI:
-    api_key = os.getenv("NVIDIA_API_KEY")
+    api_key = settings.NVIDIA_API_KEY
     if not api_key:
         raise ValueError("La variable d'environnement NVIDIA_API_KEY n'est pas définie.")
     return OpenAI(
@@ -75,7 +76,7 @@ def embed_texts(
 
 def save_to_chroma(
     chunks: list[dict],
-    chroma_path: str = DEFAULT_CHROMA_PATH,
+    chroma_path: str | Path = DEFAULT_CHROMA_PATH,
     collection_name: str = DEFAULT_COLLECTION,
     embed_model: str = DEFAULT_EMBED_MODEL,
 ) -> chromadb.Collection:
@@ -91,10 +92,11 @@ def save_to_chroma(
     Returns:
         La collection ChromaDB créée/mise à jour.
     """
-    Path(chroma_path).mkdir(parents=True, exist_ok=True)
+    chroma_path = Path(chroma_path)
+    chroma_path.mkdir(parents=True, exist_ok=True)
 
     # Initialiser ChromaDB persistant
-    chroma_client = chromadb.PersistentClient(path=chroma_path)
+    chroma_client = chromadb.PersistentClient(path=str(chroma_path))
 
     # Supprimer la collection si elle existe déjà (re-ingestion propre)
     existing = [c.name for c in chroma_client.list_collections()]
@@ -166,7 +168,7 @@ if __name__ == "__main__":
     ]
     collection = save_to_chroma(
         chunks=fake_chunks,
-        chroma_path="vector_store/chroma_db_test",
+        chroma_path=BASE_DIR / "vector_store" / "chroma_db_test",
         collection_name="test_collection",
     )
     print(f"  ✓ Collection créée — {collection.count()} documents\n")

@@ -3,9 +3,9 @@ agents/strategist/nodes.py
 Nodes du Strategist Agent.
 """
 
-from strategist.state import StrategistState
-from strategist.prompts import SYSTEM_PROMPT, STRATEGIST_PROMPT
-from llm_clients.nim_client import call_nim
+from .state import StrategistState
+from .prompts import SYSTEM_PROMPT, STRATEGIST_PROMPT
+from ..llm_clients.nim_client import call_nim
 
 
 def strategist_node(state: StrategistState) -> StrategistState:

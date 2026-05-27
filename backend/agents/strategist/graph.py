@@ -4,8 +4,8 @@ Sous-graph LangGraph du Strategist Agent.
 """
 
 from langgraph.graph import StateGraph, START, END
-from strategist.state import StrategistState
-from strategist.nodes import strategist_node
+from .state import StrategistState
+from .nodes import strategist_node
 
 
 # ---------------------------------------------------------------------------

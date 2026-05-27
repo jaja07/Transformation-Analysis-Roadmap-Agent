@@ -4,8 +4,8 @@ Sous-graph LangGraph du Retrieval Agent.
 """
 
 from langgraph.graph import StateGraph, START, END
-from retriever.state import RetrievalState
-from retriever.nodes import generate_queries_node, retrieve_node
+from .state import RetrievalState
+from .nodes import generate_queries_node, retrieve_node
 
 
 # ---------------------------------------------------------------------------
@@ -44,8 +44,11 @@ if __name__ == "__main__":
 
     print("=== Test Retrieval Agent ===\n")
 
+    base_dir = Path(__file__).resolve().parent.parent
+    chroma_path = base_dir / "vector_store" / "chroma_db"
+
     # Vérifier que ChromaDB existe
-    if not Path("vector_store/chroma_db").exists():
+    if not chroma_path.exists():
         print("✗ ChromaDB introuvable.")
         print("  Lance d'abord : python ingestion/run_ingestion.py")
         exit(1)
@@ -63,7 +66,7 @@ if __name__ == "__main__":
         "what_context": "",
         "how_context": "",
         "global_context": "",
-    }
+    } # type: ignore
 
     print("[Test] Lancement du Retrieval Agent...\n")
     result = retrieval_graph.invoke(initial_state)

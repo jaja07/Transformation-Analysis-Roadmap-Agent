@@ -1,8 +1,7 @@
 import os
 from dotenv import load_dotenv
 from langchain_community.chat_models import ChatOllama
-
-load_dotenv()
+from core.config import settings
 
 def get_local_llama(temperature: float = 0.2, model_name: str = "llama3.2") -> ChatOllama:
     """
@@ -10,8 +9,8 @@ def get_local_llama(temperature: float = 0.2, model_name: str = "llama3.2") -> C
     Idéal pour : Tâches répétitives, expérimentations, ou traitements à faible criticité
     sans consommer de crédits API.
     """
-    base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-    
+
+    base_url = settings.OLLAMA_BASE_URL
     return ChatOllama(
         base_url=base_url,
         model=model_name,

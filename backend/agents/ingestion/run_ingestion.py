@@ -13,20 +13,22 @@ Les agents utilisent ensuite la DB sans relancer ce script.
 import sys
 from pathlib import Path
 
-# Ajouter la racine du projet au path
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+# Ajouter la racine du backend au path (pour importer `agents`, `core`, ...)
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 
-from ingestion.loader import load_corpus
-from ingestion.chunker import chunk_documents
-from ingestion.embedder import save_to_chroma
+# Imports nommés depuis le package racine `agents` pour cohérence
+from agents.ingestion.loader import load_corpus
+from agents.ingestion.chunker import chunk_documents
+from agents.ingestion.embedder import save_to_chroma
 
 
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
 
-CORPUS_DIR      = Path("data/corpus")
-CHROMA_PATH     = "vector_store/chroma_db"
+BASE_DIR        = Path(__file__).resolve().parent.parent
+CORPUS_DIR      = BASE_DIR / "data" / "corpus"
+CHROMA_PATH     = BASE_DIR / "vector_store" / "chroma_db"
 COLLECTION_NAME = "digital_transformation_corpus"
 
 # Paramètres de chunking
@@ -60,7 +62,7 @@ def run_ingestion():
     print("── Étape 3/3 : Embedding + sauvegarde ChromaDB ──")
     collection = save_to_chroma(
         chunks=chunks,
-        chroma_path=CHROMA_PATH,
+        chroma_path=str(CHROMA_PATH),
         collection_name=COLLECTION_NAME,
     )
 
@@ -70,7 +72,7 @@ def run_ingestion():
     print(f"  Documents chargés : {len(documents)}")
     print(f"  Chunks créés      : {len(chunks)}")
     print(f"  Vecteurs indexés  : {collection.count()}")
-    print(f"  DB sauvegardée    : {Path(CHROMA_PATH).resolve()}")
+    print(f"  DB sauvegardée    : {CHROMA_PATH.resolve()}")
     print("=" * 60)
 
 
